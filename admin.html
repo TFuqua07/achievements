@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Nebula's Achievements</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --text-primary: #e0e0e0;
+            --text-secondary: #9090a0;
+            --accent: #6b5ce7;
+            --accent-hover: #7d6ff0;
+            --error: #e74c3c;
+            --success: #2ecc71;
+            --border: #2a2a35;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 400;
+        }
+        
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .back-link:hover {
+            color: var(--accent);
+        }
+        
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        
+        .login-container {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .login-container p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+        
+        button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        button:hover {
+            background: var(--accent-hover);
+        }
+        
+        button.secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        
+        button.secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .admin-panel {
+            display: none;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .tab {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+        }
+        
+        .tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        input, select {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+        
+        .message.error {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+            display: block;
+        }
+        
+        .message.success {
+            background: rgba(46, 204, 113, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            display: block;
+        }
+        
+        .entries-list {
+            margin-top: 3rem;
+        }
+        
+        .entries-list h3 {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+        
+        .entry-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .entry-info {
+            flex: 1;
+        }
+        
+        .entry-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .entry-meta {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .entry-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+        
+        .btn-danger {
+            background: var(--error);
+        }
+        
+        .category-select {
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Admin Panel</h1>
+        <a href="/" class="back-link">Back to Site</a>
+    </header>
+    
+    <main>
+        <!-- Login View -->
+        <div id="login-view" class="login-container">
+            <p>You must be logged in to manage achievements.</p>
+            <button onclick="netlifyIdentity.open('login')">Login</button>
+        </div>
+        
+        <!-- Admin Panel -->
+        <div id="admin-view" class="admin-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <span id="user-email" style="color: var(--text-secondary);"></span>
+                <button class="secondary" onclick="netlifyIdentity.logout()">Logout</button>
+            </div>
+            
+            <div id="message" class="message"></div>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('add')">Add New</button>
+                <button class="tab" onclick="switchTab('manage')">Manage Entries</button>
+            </div>
+            
+            <!-- Add Tab -->
+            <div id="add-tab" class="form-section active">
+                <div class="form-group category-select">
+                    <label>Category</label>
+                    <select id="category" onchange="updateFormFields()">
+                        <option value="">Select category...</option>
+                        <option value="celeste_goldens">Celeste Goldens</option>
+                        <option value="celeste_clears">Celeste Clears</option>
+                        <option value="demons">Demons</option>
+                        <option value="gd_platformer">Platformer Levels (GD)</option>
+                    </select>
+                </div>
+                
+                <form id="achievement-form" onsubmit="saveAchievement(event)">
+                    <div class="form-group">
+                        <label>Challenge Name</label>
+                        <input type="text" id="name" required placeholder="e.g. Starfruit Supernova">
+                    </div>
+                    
+                    <div class="form-row" id="tier-row" style="display: none;">
+                        <div class="form-group">
+                            <label>Tier (1-22)</label>
+                            <input type="number" id="tier" min="1" max="22" placeholder="1">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row" id="star-row" style="display: none;">
+                        <div class="form-group">
+                            <label>Star Rating (1-9)</label>
+                            <input type="number" id="star" min="1" max="9" placeholder="1">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Campaign Name (Optional)</label>
+                        <input type="text" id="campaign" placeholder="e.g. Strawberry Jam">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Video Link (Optional)</label>
+                        <input type="url" id="video" placeholder="https://youtube.com/...">
+                    </div>
+                    
+                    <button type="submit">Save Achievement</button>
+                </form>
+            </div>
+            
+            <!-- Manage Tab -->
+            <div id="manage-tab" class="form-section">
+                <div class="form-group">
+                    <label>Filter by Category</label>
+                    <select id="filter-category" onchange="loadEntries()">
+                        <option value="all">All Categories</option>
+                        <option value="celeste_goldens">Celeste Goldens</option>
+                        <option value="celeste_clears">Celeste Clears</option>
+                        <option value="demons">Demons</option>
+                        <option value="gd_platformer">Platformer Levels (GD)</option>
+                    </select>
+                </div>
+                <div id="entries-list" class="entries-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // REPLACE THIS WITH YOUR NETLIFY SITE URL AFTER DEPLOYMENT
+        const API_URL = '/api/achievements';
+        
+        let currentUser = null;
+        let allEntries = {};
+        
+        // Initialize Netlify Identity
+        netlifyIdentity.on('init', user => {
+            if (user) {
+                currentUser = user;
+                showAdminPanel();
+            }
+        });
+        
+        netlifyIdentity.on('login', user => {
+            currentUser = user;
+            showAdminPanel();
+            netlifyIdentity.close();
+        });
+        
+        netlifyIdentity.on('logout', () => {
+            currentUser = null;
+            showLoginView();
+        });
+        
+        function showAdminPanel() {
+            document.getElementById('login-view').style.display = 'none';
+            document.getElementById('admin-view').style.display = 'block';
+            document.getElementById('user-email').textContent = currentUser.email;
+            loadEntries();
+        }
+        
+        function showLoginView() {
+            document.getElementById('login-view').style.display = 'block';
+            document.getElementById('admin-view').style.display = 'none';
+        }
+        
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tab + '-tab').classList.add('active');
+            
+            if (tab === 'manage') loadEntries();
+        }
+        
+        function updateFormFields() {
+            const category = document.getElementById('category').value;
+            const tierRow = document.getElementById('tier-row');
+            const starRow = document.getElementById('star-row');
+            const tierInput = document.getElementById('tier');
+            const starInput = document.getElementById('star');
+            
+            // Reset required
+            tierInput.required = false;
+            starInput.required = false;
+            
+            if (category === 'celeste_goldens' || category === 'demons' || category === 'gd_platformer') {
+                tierRow.style.display = 'block';
+                starRow.style.display = 'none';
+                tierInput.required = true;
+                starInput.value = '';
+            } else if (category === 'celeste_clears') {
+                tierRow.style.display = 'none';
+                starRow.style.display = 'block';
+                starInput.required = true;
+                tierInput.value = '';
+            } else {
+                tierRow.style.display = 'none';
+                starRow.style.display = 'none';
+            }
+        }
+        
+        async function saveAchievement(e) {
+            e.preventDefault();
+            
+            const category = document.getElementById('category').value;
+            if (!category) {
+                showMessage('Please select a category', 'error');
+                return;
+            }
+            
+            const data = {
+                category,
+                name: document.getElementById('name').value,
+                campaign: document.getElementById('campaign').value || null,
+                video: document.getElementById('video').value || null
+            };
+            
+            if (category === 'celeste_clears') {
+                data.star = parseInt(document.getElementById('star').value);
+            } else if (category !== '') {
+                data.tier = parseInt(document.getElementById('tier').value);
+            }
+            
+            try {
+                const token = await currentUser.jwt();
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    showMessage('Achievement saved successfully', 'success');
+                    document.getElementById('achievement-form').reset();
+                    document.getElementById('tier-row').style.display = 'none';
+                    document.getElementById('star-row').style.display = 'none';
+                    loadEntries();
+                } else {
+                    const err = await response.text();
+                    showMessage('Error: ' + err, 'error');
+                }
+            } catch (error) {
+                showMessage('Error saving: ' + error.message, 'error');
+            }
+        }
+        
+        async function loadEntries() {
+            try {
+                const response = await fetch(API_URL);
+                allEntries = await response.json();
+                renderEntries();
+            } catch (error) {
+                showMessage('Error loading entries', 'error');
+            }
+        }
+        
+        function renderEntries() {
+            const filter = document.getElementById('filter-category').value;
+            const container = document.getElementById('entries-list');
+            
+            let html = '';
+            const categories = filter === 'all' ? 
+                ['celeste_goldens', 'celeste_clears', 'demons', 'gd_platformer'] : 
+                [filter];
+            
+            categories.forEach(cat => {
+                const items = allEntries[cat] || [];
+                if (items.length === 0) return;
+                
+                html += `<h3>${getCategoryName(cat)}</h3>`;
+                items.forEach((item, index) => {
+                    const meta = item.tier ? `Tier ${item.tier}` : `Star ${item.star}`;
+                    html += `
+                        <div class="entry-item">
+                            <div class="entry-info">
+                                <div class="entry-name">${escapeHtml(item.name)}</div>
+                                <div class="entry-meta">${meta}${item.campaign ? ' · ' + escapeHtml(item.campaign) : ''}</div>
+                            </div>
+                            <div class="entry-actions">
+                                <button class="secondary btn-small" onclick="editEntry('${cat}', ${index})">Edit</button>
+                                <button class="btn-danger btn-small" onclick="deleteEntry('${cat}', ${index})">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+            
+            container.innerHTML = html || '<p style="color: var(--text-secondary);">No entries found</p>';
+        }
+        
+        function getCategoryName(key) {
+            const names = {
+                'celeste_goldens': 'Celeste Goldens',
+                'celeste_clears': 'Celeste Clears',
+                'demons': 'Demons',
+                'gd_platformer': 'Platformer Levels (GD)'
+            };
+            return names[key] || key;
+        }
+        
+        async function deleteEntry(category, index) {
+            if (!confirm('Are you sure you want to delete this entry?')) return;
+            
+            try {
+                const token = await currentUser.jwt();
+                
+                const response = await fetch(`${API_URL}?category=${category}&index=${index}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                
+                if (response.ok) {
+                    loadEntries();
+                } else {
+                    showMessage('Error deleting entry', 'error');
+                }
+            } catch (error) {
+                showMessage('Error deleting: ' + error.message, 'error');
+            }
+        }
+        
+        function editEntry(category, index) {
+            const item = allEntries[category][index];
+            
+            // Switch to add tab and populate form
+            document.querySelector('.tab').click();
+            document.getElementById('category').value = category;
+            updateFormFields();
+            
+            document.getElementById('name').value = item.name;
+            document.getElementById('campaign').value = item.campaign || '';
+            document.getElementById('video').value = item.video || '';
+            
+            if (item.tier) document.getElementById('tier').value = item.tier;
+            if (item.star) document.getElementById('star').value = item.star;
+            
+            // Change form to update mode (you'll need to implement update logic)
+            showMessage('Edit mode: Change values and save. (Delete old entry manually for now)', 'success');
+        }
+        
+        function showMessage(text, type) {
+            const msg = document.getElementById('message');
+            msg.textContent = text;
+            msg.className = 'message ' + type;
+            setTimeout(() => msg.className = 'message', 3000);
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
+
+
