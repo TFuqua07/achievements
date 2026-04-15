@@ -13,23 +13,22 @@
         }
         
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-tertiary: #1a1a25;
-            --text-primary: #e0e0e0;
-            --text-secondary: #9090a0;
+            --bg-primary: #0d0d12;
+            --bg-secondary: #15151e;
+            --bg-tertiary: #1e1e2a;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0b0;
             --accent: #6b5ce7;
             --accent-hover: #7d6ff0;
             --error: #e74c3c;
             --success: #2ecc71;
-            --border: #2a2a35;
+            --border: #2a2a3a;
         }
         
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            line-height: 1.6;
             min-height: 100vh;
         }
         
@@ -53,14 +52,10 @@
             font-size: 0.9rem;
         }
         
-        .back-link:hover {
-            color: var(--accent);
-        }
-        
         main {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 3rem 2rem;
+            padding: 2rem;
         }
         
         .login-container {
@@ -68,16 +63,11 @@
             padding: 4rem 2rem;
         }
         
-        .login-container p {
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-        }
-        
         button {
             background: var(--accent);
             color: white;
             border: none;
-            padding: 0.75rem 2rem;
+            padding: 0.75rem 1.5rem;
             border-radius: 8px;
             font-size: 1rem;
             cursor: pointer;
@@ -165,6 +155,10 @@
             gap: 1rem;
         }
         
+        .form-row.three-col {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        
         .message {
             padding: 1rem;
             border-radius: 8px;
@@ -187,13 +181,7 @@
         }
         
         .entries-list {
-            margin-top: 3rem;
-        }
-        
-        .entries-list h3 {
-            margin-bottom: 1rem;
-            color: var(--text-secondary);
-            font-weight: 400;
+            margin-top: 2rem;
         }
         
         .entry-item {
@@ -238,6 +226,12 @@
         .category-select {
             margin-bottom: 2rem;
         }
+        
+        .help-text {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
     </style>
 </head>
 <body>
@@ -247,13 +241,11 @@
     </header>
     
     <main>
-        <!-- Login View -->
         <div id="login-view" class="login-container">
             <p>You must be logged in to manage achievements.</p>
             <button onclick="netlifyIdentity.open('login')">Login</button>
         </div>
         
-        <!-- Admin Panel -->
         <div id="admin-view" class="admin-panel">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                 <span id="user-email" style="color: var(--text-secondary);"></span>
@@ -267,11 +259,10 @@
                 <button class="tab" onclick="switchTab('manage')">Manage Entries</button>
             </div>
             
-            <!-- Add Tab -->
             <div id="add-tab" class="form-section active">
                 <div class="form-group category-select">
-                    <label>Category</label>
-                    <select id="category" onchange="updateFormFields()">
+                    <label>Category *</label>
+                    <select id="category" onchange="updateFormFields()" required>
                         <option value="">Select category...</option>
                         <option value="celeste_goldens">Celeste Goldens</option>
                         <option value="celeste_clears">Celeste Clears</option>
@@ -282,39 +273,64 @@
                 
                 <form id="achievement-form" onsubmit="saveAchievement(event)">
                     <div class="form-group">
-                        <label>Challenge Name</label>
+                        <label>Challenge Name *</label>
                         <input type="text" id="name" required placeholder="e.g. Starfruit Supernova">
                     </div>
                     
-                    <div class="form-row" id="tier-row" style="display: none;">
-                        <div class="form-group">
-                            <label>Tier (1-22)</label>
+                    <div class="form-row" id="difficulty-row" style="display: none;">
+                        <div class="form-group" id="tier-group" style="display: none;">
+                            <label>Tier (1-22) *</label>
                             <input type="number" id="tier" min="1" max="22" placeholder="1">
                         </div>
-                    </div>
-                    
-                    <div class="form-row" id="star-row" style="display: none;">
-                        <div class="form-group">
-                            <label>Star Rating (1-9)</label>
+                        <div class="form-group" id="star-group" style="display: none;">
+                            <label>Star Rating (1-9) *</label>
                             <input type="number" id="star" min="1" max="9" placeholder="1">
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label>Campaign Name (Optional)</label>
-                        <input type="text" id="campaign" placeholder="e.g. Strawberry Jam">
+                        <label>Campaign / Pack</label>
+                        <input type="text" id="campaign" placeholder="e.g. Strawberry Jam, Beginner Lobby">
                     </div>
                     
                     <div class="form-group">
-                        <label>Video Link (Optional)</label>
-                        <input type="url" id="video" placeholder="https://youtube.com/...">
+                        <label>Thumbnail URL</label>
+                        <input type="url" id="thumbnail" placeholder="https://i.imgur.com/...">
+                        <div class="help-text">Direct image link (Imgur, etc.)</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Video URL</label>
+                        <input type="url" id="video" placeholder="https://youtube.com/... or https://bilibili.com/...">
+                    </div>
+                    
+                    <!-- Celeste-specific fields -->
+                    <div id="celeste-fields" style="display: none;">
+                        <div class="form-row">
+<div class="form-group" id="time-group">
+    <label>Time</label>
+    <input type="text" id="time" placeholder="e.g. 1:23:45" pattern="[0-9]+:[0-5][0-9]:[0-5][0-9]">
+    <div class="help-text">hh:mm:ss</div>
+</div>
+                            <div class="form-group" id="deaths-group" style="display: none;">
+                                <label>Deaths</label>
+                                <input type="number" id="deaths" min="0" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- GD-specific fields -->
+                    <div id="gd-fields" style="display: none;">
+                        <div class="form-group">
+                            <label>Attempts</label>
+                            <input type="number" id="attempts" min="1" placeholder="e.g. 1500">
+                        </div>
                     </div>
                     
                     <button type="submit">Save Achievement</button>
                 </form>
             </div>
             
-            <!-- Manage Tab -->
             <div id="manage-tab" class="form-section">
                 <div class="form-group">
                     <label>Filter by Category</label>
@@ -333,11 +349,9 @@
 
     <script>
         const API_URL = '/api/achievements';
-        
         let currentUser = null;
         let allEntries = {};
         
-        // Initialize Netlify Identity
         netlifyIdentity.on('init', user => {
             if (user) {
                 currentUser = user;
@@ -380,28 +394,45 @@
         
         function updateFormFields() {
             const category = document.getElementById('category').value;
-            const tierRow = document.getElementById('tier-row');
-            const starRow = document.getElementById('star-row');
-            const tierInput = document.getElementById('tier');
-            const starInput = document.getElementById('star');
+            const tierGroup = document.getElementById('tier-group');
+            const starGroup = document.getElementById('star-group');
+            const difficultyRow = document.getElementById('difficulty-row');
+            const celesteFields = document.getElementById('celeste-fields');
+            const gdFields = document.getElementById('gd-fields');
+            const deathsGroup = document.getElementById('deaths-group');
+            const timeGroup = document.getElementById('time-group');
             
-            // Reset required
-            tierInput.required = false;
-            starInput.required = false;
+            // Reset
+            tierGroup.style.display = 'none';
+            starGroup.style.display = 'none';
+            celesteFields.style.display = 'none';
+            gdFields.style.display = 'none';
+            deathsGroup.style.display = 'none';
+            document.getElementById('tier').required = false;
+            document.getElementById('star').required = false;
             
-            if (category === 'celeste_goldens' || category === 'demons' || category === 'gd_platformer') {
-                tierRow.style.display = 'block';
-                starRow.style.display = 'none';
-                tierInput.required = true;
-                starInput.value = '';
-            } else if (category === 'celeste_clears') {
-                tierRow.style.display = 'none';
-                starRow.style.display = 'block';
-                starInput.required = true;
-                tierInput.value = '';
+            if (!category) {
+                difficultyRow.style.display = 'none';
+                return;
+            }
+            
+            difficultyRow.style.display = 'grid';
+            
+            if (category === 'celeste_clears') {
+                starGroup.style.display = 'block';
+                document.getElementById('star').required = true;
+                celesteFields.style.display = 'block';
+                deathsGroup.style.display = 'block';
+            } else if (category === 'celeste_goldens') {
+                tierGroup.style.display = 'block';
+                document.getElementById('tier').required = true;
+                celesteFields.style.display = 'block';
+                timeGroup.style.display = 'block';
             } else {
-                tierRow.style.display = 'none';
-                starRow.style.display = 'none';
+                // GD categories
+                tierGroup.style.display = 'block';
+                document.getElementById('tier').required = true;
+                gdFields.style.display = 'block';
             }
         }
         
@@ -418,13 +449,21 @@
                 category,
                 name: document.getElementById('name').value,
                 campaign: document.getElementById('campaign').value || null,
+                thumbnail: document.getElementById('thumbnail').value || null,
                 video: document.getElementById('video').value || null
             };
             
             if (category === 'celeste_clears') {
                 data.star = parseInt(document.getElementById('star').value);
-            } else if (category !== '') {
+                data.deaths = document.getElementById('deaths').value ? parseInt(document.getElementById('deaths').value) : null;
+                data.time = document.getElementById('time').value || null;
+            } else if (category === 'celeste_goldens') {
                 data.tier = parseInt(document.getElementById('tier').value);
+                data.time = document.getElementById('time').value || null;
+            } else {
+                // GD
+                data.tier = parseInt(document.getElementById('tier').value);
+                data.attempts = document.getElementById('attempts').value ? parseInt(document.getElementById('attempts').value) : null;
             }
             
             try {
@@ -442,8 +481,7 @@
                 if (response.ok) {
                     showMessage('Achievement saved successfully', 'success');
                     document.getElementById('achievement-form').reset();
-                    document.getElementById('tier-row').style.display = 'none';
-                    document.getElementById('star-row').style.display = 'none';
+                    updateFormFields();
                     loadEntries();
                 } else {
                     const err = await response.text();
@@ -477,18 +515,18 @@
                 const items = allEntries[cat] || [];
                 if (items.length === 0) return;
                 
-                html += `<h3>${getCategoryName(cat)}</h3>`;
+                html += `<h3 style="margin: 1.5rem 0 1rem; color: var(--text-secondary); font-weight: 400;">${getCategoryName(cat)}</h3>`;
                 items.forEach((item, index) => {
-                    const meta = item.tier ? `Tier ${item.tier}` : `Star ${item.star}`;
+                    const meta = item.tier !== undefined ? `Tier ${item.tier}` : `${item.star} Star`;
+                    const extra = item.time ? ` • ${item.time}` : item.deaths !== null ? ` • ${item.deaths} deaths` : item.attempts ? ` • ${item.attempts} attempts` : '';
                     html += `
                         <div class="entry-item">
                             <div class="entry-info">
                                 <div class="entry-name">${escapeHtml(item.name)}</div>
-                                <div class="entry-meta">${meta}${item.campaign ? ' · ' + escapeHtml(item.campaign) : ''}</div>
+                                <div class="entry-meta">${meta}${item.campaign ? ' · ' + escapeHtml(item.campaign) : ''}${extra}</div>
                             </div>
                             <div class="entry-actions">
-                                <button class="secondary btn-small" onclick="editEntry('${cat}', ${index})">Edit</button>
-                                <button class="btn-danger btn-small" onclick="deleteEntry('${cat}', ${index})">Delete</button>
+                                <button class="secondary btn-small" onclick="deleteEntry('${cat}', ${index})">Delete</button>
                             </div>
                         </div>
                     `;
@@ -529,25 +567,6 @@
             } catch (error) {
                 showMessage('Error deleting: ' + error.message, 'error');
             }
-        }
-        
-        function editEntry(category, index) {
-            const item = allEntries[category][index];
-            
-            // Switch to add tab and populate form
-            document.querySelector('.tab').click();
-            document.getElementById('category').value = category;
-            updateFormFields();
-            
-            document.getElementById('name').value = item.name;
-            document.getElementById('campaign').value = item.campaign || '';
-            document.getElementById('video').value = item.video || '';
-            
-            if (item.tier) document.getElementById('tier').value = item.tier;
-            if (item.star) document.getElementById('star').value = item.star;
-            
-            // Change form to update mode (you'll need to implement update logic)
-            showMessage('Edit mode: Change values and save. (Delete old entry manually for now)', 'success');
         }
         
         function showMessage(text, type) {
