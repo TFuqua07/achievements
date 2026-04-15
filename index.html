@@ -364,6 +364,20 @@
             
             container.innerHTML = html;
         }
+
+        function formatTime(timeStr) {
+    const parts = timeStr.split(':');
+    if (parts.length === 3) {
+        const hours = parseInt(parts[0]);
+        const mins = parts[1];
+        const secs = parts[2];
+        return `${hours}:${mins}:${secs}`;
+    }
+    return timeStr;
+}
+
+
+
         
         function renderCard(item, category) {
             const isCeleste = category.includes('celeste');
@@ -372,7 +386,6 @@
             let statsHtml = '';
             
             if (isClear) {
-                // Celeste Clears: deaths, time
                 if (item.deaths !== undefined) {
                     statsHtml += `
                         <div class="stat">
