@@ -12,189 +12,264 @@
         }
         
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-tertiary: #1a1a25;
-            --text-primary: #e0e0e0;
-            --text-secondary: #9090a0;
-            --accent: #6b5ce7;
-            --accent-hover: #7d6ff0;
-            --border: #2a2a35;
+            --bg-primary: #0d0d12;
+            --bg-secondary: #15151e;
+            --bg-tertiary: #1e1e2a;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0b0;
+            --border: #2a2a3a;
         }
         
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            line-height: 1.6;
             min-height: 100vh;
         }
         
         header {
             background: var(--bg-secondary);
             border-bottom: 1px solid var(--border);
-            padding: 2rem;
-            text-align: center;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         h1 {
-            font-size: 2.5rem;
-            font-weight: 300;
-            letter-spacing: 2px;
-            margin-bottom: 0.5rem;
-        }
-        
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+            font-size: 1.75rem;
+            font-weight: 400;
+            letter-spacing: 1px;
         }
         
         .admin-link {
-            position: absolute;
-            top: 1.5rem;
-            right: 2rem;
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.85rem;
-            transition: color 0.2s;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: all 0.2s;
         }
         
         .admin-link:hover {
-            color: var(--accent);
-        }
-        
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
-        }
-        
-        .category {
-            margin-bottom: 4rem;
-        }
-        
-        .category-title {
-            font-size: 1.5rem;
-            font-weight: 400;
-            color: var(--accent);
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        
-        .count {
-            background: var(--bg-tertiary);
-            color: var(--text-secondary);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            border: 1px solid var(--border);
-        }
-        
-        .achievements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .achievement-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-        
-        .achievement-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent);
-        }
-        
-        .achievement-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
-        
-        .challenge-name {
-            font-size: 1.1rem;
-            font-weight: 500;
             color: var(--text-primary);
-            line-height: 1.4;
+            border-color: var(--text-secondary);
         }
         
-        .tier-badge, .star-badge {
-            background: var(--accent);
-            color: white;
-            padding: 0.35rem 0.75rem;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 600;
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        .tab-nav::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
             white-space: nowrap;
         }
         
-        .star-badge {
-            background: #f0a500;
-            color: #1a1a1a;
+        .tab-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.03);
         }
         
-        .achievement-meta {
+        .tab-btn.active {
+            color: var(--text-primary);
+            border-bottom-color: #6b5ce7;
+        }
+        
+        /* Tier Headers */
+        .tier-section {
+            margin-bottom: 2rem;
+        }
+        
+        .tier-header {
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-radius: 8px 8px 0 0;
+            margin: 0 2rem;
+            margin-top: 2rem;
+        }
+        
+        .tier-count {
+            background: rgba(0,0,0,0.3);
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+        }
+        
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1rem;
+            padding: 1rem 2rem 2rem;
+        }
+        
+        .achievement-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .achievement-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+        
+        .card-thumbnail {
+            width: 100%;
+            height: 180px;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .card-content {
+            padding: 1.25rem;
+        }
+        
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .card-campaign {
             color: var(--text-secondary);
             font-size: 0.9rem;
             margin-bottom: 1rem;
         }
         
-        .campaign {
-            display: inline-block;
-            background: var(--bg-tertiary);
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            margin-top: 0.5rem;
+        .card-stats {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
             font-size: 0.85rem;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+        }
+        
+        .stat svg {
+            width: 14px;
+            height: 14px;
         }
         
         .video-link {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            color: var(--accent);
+            color: #6b5ce7;
             text-decoration: none;
             font-size: 0.9rem;
-            transition: color 0.2s;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(107, 92, 231, 0.1);
+            border-radius: 6px;
+            transition: background 0.2s;
         }
         
         .video-link:hover {
-            color: var(--accent-hover);
+            background: rgba(107, 92, 231, 0.2);
+        }
+        
+        /* Color Schemes - Celeste Clears (Stars) */
+        .star-10 { background: linear-gradient(90deg, #1a0a2e, #2d1b4e); color: #b8a9d9; }
+        .star-9 { background: linear-gradient(90deg, #0f172a, #1e3a5f); color: #60a5fa; }
+        .star-8 { background: linear-gradient(90deg, #0a1f1f, #134e4e); color: #2dd4bf; }
+        .star-7 { background: linear-gradient(90deg, #0a1f0a, #134e13); color: #4ade80; }
+        .star-6 { background: linear-gradient(90deg, #0a1f0a, #134e13); color: #4ade80; }
+        .star-5 { background: linear-gradient(90deg, #1f1f0a, #4e4e13); color: #facc15; }
+        .star-4 { background: linear-gradient(90deg, #1f0f0a, #4e1f13); color: #fb923c; }
+        .star-3 { background: linear-gradient(90deg, #1f0a0a, #4e1313); color: #f87171; }
+        .star-2 { background: linear-gradient(90deg, #1f0a1f, #4e134e); color: #e879f9; }
+        .star-1 { background: linear-gradient(90deg, #1a0a2e, #2d1b4e); color: #a78bfa; }
+        
+        /* Color Schemes - Tiers (Goldens/Demons/GD) */
+        .tier-22 { background: linear-gradient(90deg, #2e1a4e, #4a2d7a); color: #d8b4fe; }
+        .tier-21 { background: linear-gradient(90deg, #3a1f5c, #5c2d8a); color: #e9d5ff; }
+        .tier-20 { background: linear-gradient(90deg, #4a1f6e, #7c3aed); color: #f3e8ff; }
+        .tier-19 { background: linear-gradient(90deg, #5c2d6e, #a855f7); color: #fae8ff; }
+        .tier-18 { background: linear-gradient(90deg, #6e2d5c, #c026d3); color: #fce7f3; }
+        .tier-17 { background: linear-gradient(90deg, #7c2d4a, #e11d48); color: #ffe4e6; }
+        .tier-16 { background: linear-gradient(90deg, #7c3a2d, #ea580c); color: #ffedd5; }
+        .tier-15 { background: linear-gradient(90deg, #7c4a2d, #f97316); color: #fff7ed; }
+        .tier-14 { background: linear-gradient(90deg, #7c5c2d, #fb923c); color: #fffbeb; }
+        .tier-13 { background: linear-gradient(90deg, #6e5c2d, #fbbf24); color: #fef3c7; }
+        .tier-12 { background: linear-gradient(90deg, #5c5c2d, #facc15); color: #fef9c3; }
+        .tier-11 { background: linear-gradient(90deg, #4a5c2d, #fde047); color: #fefce8; }
+        .tier-10 { background: linear-gradient(90deg, #3a5c2d, #bef264); color: #f7fee7; }
+        .tier-9 { background: linear-gradient(90deg, #2d5c3a, #86efac); color: #f0fdf4; }
+        .tier-8 { background: linear-gradient(90deg, #2d5c4a, #4ade80); color: #f0fdf4; }
+        .tier-7 { background: linear-gradient(90deg, #2d5c5c, #2dd4bf); color: #f0fdfa; }
+        .tier-6 { background: linear-gradient(90deg, #2d4a5c, #5eead4); color: #ecfeff; }
+        .tier-5 { background: linear-gradient(90deg, #2d3a5c, #38bdf8); color: #f0f9ff; }
+        .tier-4 { background: linear-gradient(90deg, #2d2d5c, #60a5fa); color: #eff6ff; }
+        .tier-3 { background: linear-gradient(90deg, #1f2d5c, #818cf8); color: #eef2ff; }
+        .tier-2 { background: linear-gradient(90deg, #1f1f5c, #a5b4fc); color: #eef2ff; }
+        .tier-1 { background: linear-gradient(90deg, #1a1a4e, #6366f1); color: #e0e7ff; }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
         }
         
         .empty-state {
             text-align: center;
-            padding: 3rem;
+            padding: 4rem 2rem;
             color: var(--text-secondary);
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            border: 1px dashed var(--border);
         }
         
         @media (max-width: 768px) {
-            .achievements-grid {
+            .cards-grid {
                 grid-template-columns: 1fr;
+                padding: 1rem;
             }
-            
-            h1 {
-                font-size: 1.75rem;
-            }
-            
-            .admin-link {
-                position: static;
-                display: block;
-                margin-top: 1rem;
+            .tier-header {
+                margin: 1rem 1rem 0;
             }
         }
     </style>
@@ -202,57 +277,88 @@
 <body>
     <header>
         <h1>Nebula's Achievements</h1>
-        <div class="subtitle">Gaming Milestones & Records</div>
-        <a href="/admin" class="admin-link">Admin</a>
+        <a href="/admin" class="admin-link">Admin Panel</a>
     </header>
+    
+    <nav class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('celeste_goldens')">Celeste Goldens</button>
+        <button class="tab-btn" onclick="switchTab('celeste_clears')">Celeste Clears</button>
+        <button class="tab-btn" onclick="switchTab('demons')">Demons</button>
+        <button class="tab-btn" onclick="switchTab('gd_platformer')">GD Platformers</button>
+    </nav>
     
     <main id="content">
         <!-- Content loaded dynamically -->
     </main>
 
     <script>
-        // REPLACE THIS WITH YOUR NETLIFY SITE URL AFTER DEPLOYMENT
-        // Format: https://your-site-name.netlify.app
         const API_URL = '/api/achievements';
+        let currentData = {};
+        let currentTab = 'celeste_goldens';
         
         async function loadAchievements() {
             try {
                 const response = await fetch(API_URL);
-                const data = await response.json();
-                renderAchievements(data);
+                currentData = await response.json();
+                renderTab(currentTab);
             } catch (error) {
                 document.getElementById('content').innerHTML = 
                     '<div class="empty-state">Failed to load achievements</div>';
             }
         }
         
-        function renderAchievements(data) {
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase().includes(
+                    tab === 'gd_platformer' ? 'platformer' : tab.replace('_', ' ')
+                ));
+            });
+            renderTab(tab);
+        }
+        
+        function renderTab(category) {
             const container = document.getElementById('content');
+            const items = currentData[category] || [];
             
-            const categories = [
-                { key: 'celeste_goldens', title: 'Celeste Goldens' },
-                { key: 'celeste_clears', title: 'Celeste Clears' },
-                { key: 'demons', title: 'Demons' },
-                { key: 'gd_platformer', title: 'Platformer Levels (GD)' }
-            ];
+            if (items.length === 0) {
+                container.innerHTML = '<div class="empty-state">No achievements yet</div>';
+                return;
+            }
+            
+            // Group by tier or star
+            const grouped = {};
+            items.forEach(item => {
+                const key = item.tier !== undefined ? `tier-${item.tier}` : `star-${item.star}`;
+                if (!grouped[key]) grouped[key] = [];
+                grouped[key].push(item);
+            });
+            
+            // Sort keys (highest first)
+            const sortedKeys = Object.keys(grouped).sort((a, b) => {
+                const numA = parseInt(a.split('-')[1]);
+                const numB = parseInt(b.split('-')[1]);
+                return numB - numA;
+            });
             
             let html = '';
-            
-            categories.forEach(cat => {
-                const items = data[cat.key] || [];
+            sortedKeys.forEach(key => {
+                const group = grouped[key];
+                const isTier = key.startsWith('tier');
+                const num = key.split('-')[1];
+                const cssClass = isTier ? `tier-${num}` : `star-${num}`;
+                const label = isTier ? `Tier ${num}` : `${num} Star`;
+                
                 html += `
-                    <section class="category">
-                        <h2 class="category-title">
-                            ${cat.title}
-                            <span class="count">${items.length}</span>
-                        </h2>
-                        ${items.length === 0 ? 
-                            '<div class="empty-state">No achievements yet</div>' :
-                            `<div class="achievements-grid">
-                                ${items.map(item => renderCard(item, cat.key)).join('')}
-                            </div>`
-                        }
-                    </section>
+                    <div class="tier-section">
+                        <div class="tier-header ${cssClass}">
+                            ${label}
+                            <span class="tier-count">${group.length}</span>
+                        </div>
+                        <div class="cards-grid">
+                            ${group.map(item => renderCard(item, category)).join('')}
+                        </div>
+                    </div>
                 `;
             });
             
@@ -260,31 +366,82 @@
         }
         
         function renderCard(item, category) {
+            const isCeleste = category.includes('celeste');
             const isClear = category === 'celeste_clears';
-            const badge = isClear ? 
-                `<span class="star-badge">${item.star} Star</span>` :
-                `<span class="tier-badge">Tier ${item.tier}</span>`;
             
-            const campaign = item.campaign ? 
-                `<div class="campaign">${item.campaign}</div>` : '';
+            let statsHtml = '';
+            
+            if (isClear) {
+                // Celeste Clears: deaths, time
+                if (item.deaths !== undefined) {
+                    statsHtml += `
+                        <div class="stat">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8 12h8M12 8v8"/>
+                            </svg>
+                            ${item.deaths} deaths
+                        </div>
+                    `;
+                }
+               if (item.time) {
+    statsHtml += `
+        <div class="stat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+            </svg>
+            ${formatTime(item.time)}
+        </div>
+    `;
+}
+            } else if (category === 'celeste_goldens') {
+                // Goldens: time only
+                if (item.time) {
+                    statsHtml += `
+                        <div class="stat">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 6v6l4 2"/>
+                            </svg>
+                            ${item.time}
+                        </div>
+                    `;
+                }
+            } else {
+                // GD: attempts
+                if (item.attempts !== undefined) {
+                    statsHtml += `
+                        <div class="stat">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2l3 6 6 1-4 4 1 6-6-3-6 3 1-6-4-4 6-1z"/>
+                            </svg>
+                            ${item.attempts} attempts
+                        </div>
+                    `;
+                }
+            }
+            
+            const thumbnailHtml = item.thumbnail ? 
+                `<img src="${escapeHtml(item.thumbnail)}" alt="">` : 
+                'No Thumbnail';
             
             return `
                 <article class="achievement-card">
-                    <div class="achievement-header">
-                        <div class="challenge-name">${escapeHtml(item.name)}</div>
-                        ${badge}
+                    <div class="card-thumbnail">${thumbnailHtml}</div>
+                    <div class="card-content">
+                        <h3 class="card-title">${escapeHtml(item.name)}</h3>
+                        ${item.campaign ? `<div class="card-campaign">${escapeHtml(item.campaign)}</div>` : ''}
+                        <div class="card-stats">${statsHtml}</div>
+                        ${item.video ? `
+                            <a href="${escapeHtml(item.video)}" target="_blank" class="video-link">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3"/>
+                                </svg>
+                                Watch Video
+                            </a>
+                        ` : ''}
                     </div>
-                    <div class="achievement-meta">
-                        ${campaign}
-                    </div>
-                    ${item.video ? `
-                        <a href="${escapeHtml(item.video)}" target="_blank" class="video-link">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                            </svg>
-                            View Video
-                        </a>
-                    ` : ''}
                 </article>
             `;
         }
