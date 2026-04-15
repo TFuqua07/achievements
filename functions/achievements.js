@@ -1,25 +1,52 @@
-const fs = require('fs').promises;
-const path = require('path');
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN; // We'll set this in Netlify
+const REPO_OWNER = process.env.REPO_OWNER;    // Your GitHub username
+const REPO_NAME = process.env.REPO_NAME;        // Your repo name
+const FILE_PATH = 'data/achievements.json';
 
-const DATA_FILE = path.join(__dirname, '..', 'data', 'achievements.json');
-
-async function readData() {
-    try {
-        const data = await fs.readFile(DATA_FILE, 'utf8');
-        return JSON.parse(data);
-    } catch (error) {
+async function getFileFromGitHub() {
+    const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+        headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`,
+            'Accept': 'application/vnd.github.v3+json'
+        }
+    });
+    
+    if (response.status === 404) {
+        // File doesn't exist yet, return default
         return {
-            celeste_goldens: [],
-            celeste_clears: [],
-            demons: [],
-            gd_platformer: []
+            content: {
+                celeste_goldens: [],
+                celeste_clears: [],
+                demons: [],
+                gd_platformer: []
+            },
+            sha: null
         };
     }
+    
+    const data = await response.json();
+    const content = JSON.parse(Buffer.from(data.content, 'base64').toString());
+    return { content, sha: data.sha };
 }
 
-async function writeData(data) {
-    await fs.mkdir(path.dirname(DATA_FILE), { recursive: true });
-    await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2));
+async function saveFileToGitHub(content, sha) {
+    const body = {
+        message: 'Update achievements',
+        content: Buffer.from(JSON.stringify(content, null, 2)).toString('base64'),
+        sha: sha // null if creating new file
+    };
+    
+    const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+    });
+    
+    return response.ok;
 }
 
 exports.handler = async (event, context) => {
@@ -36,55 +63,29 @@ exports.handler = async (event, context) => {
     try {
         // GET is public
         if (event.httpMethod === 'GET') {
-            const data = await readData();
+            const { content } = await getFileFromGitHub();
             return {
                 statusCode: 200,
                 headers,
-                body: JSON.stringify(data)
+                body: JSON.stringify(content)
             };
         }
         
-        // Check for authorization header
+        // Check auth
         const authHeader = event.headers.authorization || event.headers.Authorization;
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return {
-                statusCode: 401,
-                headers,
-                body: 'Unauthorized - No token provided'
-            };
+            return { statusCode: 401, headers, body: 'Unauthorized' };
         }
         
-        // For Netlify Identity, we just check that the token exists and looks valid
-        // The actual verification happens through Netlify's context
-        const token = authHeader.replace('Bearer ', '');
-        
-        // Netlify injects user info into context if token is valid
-        // If we got here with a token, we'll trust it for now (Netlify handles the rest)
-        if (!context.clientContext || !context.clientContext.user) {
-            // Fallback: accept any non-empty token for now to get you working
-            // In production, you'd want stricter validation
-            if (token.length < 10) {
-                return {
-                    statusCode: 401,
-                    headers,
-                    body: 'Unauthorized - Invalid token'
-                };
-            }
-        }
+        const { content, sha } = await getFileFromGitHub();
         
         if (event.httpMethod === 'POST') {
             const body = JSON.parse(event.body);
             const { category, name, tier, star, campaign, video } = body;
             
             if (!category || !name) {
-                return {
-                    statusCode: 400,
-                    headers,
-                    body: 'Missing required fields'
-                };
+                return { statusCode: 400, headers, body: 'Missing required fields' };
             }
-            
-            const data = await readData();
             
             const newEntry = {
                 name,
@@ -96,16 +97,17 @@ exports.handler = async (event, context) => {
             if (tier !== undefined) newEntry.tier = parseInt(tier);
             if (star !== undefined) newEntry.star = parseInt(star);
             
-            if (!data[category]) data[category] = [];
-            data[category].push(newEntry);
+            if (!content[category]) content[category] = [];
+            content[category].push(newEntry);
             
+            // Sort
             if (category === 'celeste_clears') {
-                data[category].sort((a, b) => (b.star || 0) - (a.star || 0));
+                content[category].sort((a, b) => (b.star || 0) - (a.star || 0));
             } else {
-                data[category].sort((a, b) => (b.tier || 0) - (a.tier || 0));
+                content[category].sort((a, b) => (b.tier || 0) - (a.tier || 0));
             }
             
-            await writeData(data);
+            await saveFileToGitHub(content, sha);
             
             return {
                 statusCode: 200,
@@ -116,11 +118,10 @@ exports.handler = async (event, context) => {
         
         if (event.httpMethod === 'DELETE') {
             const { category, index } = event.queryStringParameters || {};
-            const data = await readData();
             
-            if (data[category] && data[category][index]) {
-                data[category].splice(parseInt(index), 1);
-                await writeData(data);
+            if (content[category] && content[category][index]) {
+                content[category].splice(parseInt(index), 1);
+                await saveFileToGitHub(content, sha);
             }
             
             return {
@@ -130,17 +131,13 @@ exports.handler = async (event, context) => {
             };
         }
         
-        return {
-            statusCode: 405,
-            headers,
-            body: 'Method not allowed'
-        };
+        return { statusCode: 405, headers, body: 'Method not allowed' };
         
     } catch (error) {
         return {
             statusCode: 500,
             headers,
-            body: 'Server error: ' + error.message
+            body: 'Error: ' + error.message
         };
     }
 };
