@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Nebula's Achievements</title>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,23 +14,26 @@
         }
         
         :root {
-            --bg-primary: #0d0d12;
-            --bg-secondary: #15151e;
-            --bg-tertiary: #1e1e2a;
-            --text-primary: #e8e8e8;
-            --text-secondary: #a0a0b0;
-            --accent: #6b5ce7;
-            --accent-hover: #7d6ff0;
-            --error: #e74c3c;
-            --success: #2ecc71;
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --bg-card: #1e1e2e;
+            --text-primary: #f0f0f5;
+            --text-secondary: #9090a0;
+            --text-muted: #606070;
             --border: #2a2a3a;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --error: #ef4444;
+            --success: #22c55e;
         }
         
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
+            line-height: 1.5;
         }
         
         header {
@@ -42,18 +46,19 @@
         }
         
         h1 {
-            font-size: 1.5rem;
-            font-weight: 400;
+            font-size: 1.25rem;
+            font-weight: 600;
         }
         
         .back-link {
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
+            font-weight: 500;
         }
         
         main {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 2rem;
         }
@@ -67,11 +72,13 @@
             background: var(--accent);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
+            padding: 0.625rem 1.25rem;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.15s;
+            font-family: inherit;
         }
         
         button:hover {
@@ -85,8 +92,8 @@
         }
         
         button.secondary:hover {
-            border-color: var(--accent);
-            color: var(--accent);
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
         }
         
         .admin-panel {
@@ -95,7 +102,7 @@
         
         .tabs {
             display: flex;
-            gap: 1rem;
+            gap: 0.5rem;
             margin-bottom: 2rem;
             border-bottom: 1px solid var(--border);
         }
@@ -104,10 +111,17 @@
             background: none;
             border: none;
             color: var(--text-secondary);
-            padding: 0.75rem 1.5rem;
+            padding: 0.75rem 1.25rem;
             cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
             border-bottom: 2px solid transparent;
             margin-bottom: -1px;
+            font-family: inherit;
+        }
+        
+        .tab:hover {
+            color: var(--text-primary);
         }
         
         .tab.active {
@@ -124,14 +138,15 @@
         }
         
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
         
         label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.375rem;
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.875rem;
+            font-weight: 500;
         }
         
         input, select {
@@ -139,9 +154,11 @@
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             color: var(--text-primary);
-            padding: 0.75rem;
+            padding: 0.625rem 0.875rem;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 0.875rem;
+            font-family: inherit;
+            transition: border-color 0.15s;
         }
         
         input:focus, select:focus {
@@ -155,41 +172,38 @@
             gap: 1rem;
         }
         
-        .form-row.three-col {
-            grid-template-columns: 1fr 1fr 1fr;
-        }
-        
         .message {
-            padding: 1rem;
+            padding: 0.875rem 1rem;
             border-radius: 8px;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.875rem;
             display: none;
         }
         
         .message.error {
-            background: rgba(231, 76, 60, 0.1);
-            border: 1px solid var(--error);
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
             color: var(--error);
             display: block;
         }
         
         .message.success {
-            background: rgba(46, 204, 113, 0.1);
-            border: 1px solid var(--success);
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
             color: var(--success);
             display: block;
         }
         
         .entries-list {
-            margin-top: 2rem;
+            margin-top: 1.5rem;
         }
         
         .entry-item {
-            background: var(--bg-secondary);
+            background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 8px;
             padding: 1rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.625rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -201,11 +215,12 @@
         
         .entry-name {
             font-weight: 500;
+            font-size: 0.9375rem;
             margin-bottom: 0.25rem;
         }
         
         .entry-meta {
-            font-size: 0.85rem;
+            font-size: 0.8125rem;
             color: var(--text-secondary);
         }
         
@@ -215,22 +230,18 @@
         }
         
         .btn-small {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.85rem;
-        }
-        
-        .btn-danger {
-            background: var(--error);
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8125rem;
         }
         
         .category-select {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
         
         .help-text {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-top: 0.25rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.375rem;
         }
     </style>
 </head>
@@ -242,13 +253,13 @@
     
     <main>
         <div id="login-view" class="login-container">
-            <p>You must be logged in to manage achievements.</p>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">You must be logged in to manage achievements.</p>
             <button onclick="netlifyIdentity.open('login')">Login</button>
         </div>
         
         <div id="admin-view" class="admin-panel">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                <span id="user-email" style="color: var(--text-secondary);"></span>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <span id="user-email" style="color: var(--text-secondary); font-size: 0.875rem;"></span>
                 <button class="secondary" onclick="netlifyIdentity.logout()">Logout</button>
             </div>
             
@@ -277,43 +288,39 @@
                         <input type="text" id="name" required placeholder="e.g. Starfruit Supernova">
                     </div>
                     
-                    <div class="form-row" id="difficulty-row" style="display: none;">
-                        <div class="form-group" id="tier-group" style="display: none;">
-                            <label>Tier (1-22) *</label>
-                            <input type="number" id="tier" min="1" max="22" placeholder="1">
-                        </div>
-                        <div class="form-group" id="star-group" style="display: none;">
-                            <label>Star Rating (1-9) *</label>
-                            <input type="number" id="star" min="1" max="9" placeholder="1">
-                        </div>
+                    <div class="form-group" id="difficulty-row" style="display: none;">
+                        <label id="difficulty-label">Difficulty *</label>
+                        <select id="difficulty" required>
+                            <!-- Populated by JS -->
+                        </select>
                     </div>
                     
                     <div class="form-group">
-                        <label>Campaign / Pack</label>
-                        <input type="text" id="campaign" placeholder="e.g. Strawberry Jam, Beginner Lobby">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Thumbnail URL</label>
-                        <input type="url" id="thumbnail" placeholder="https://i.imgur.com/...">
-                        <div class="help-text">Direct image link (Imgur, etc.)</div>
+                        <label>Campaign <span style="color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
+                        <input type="text" id="campaign" placeholder="e.g. Strawberry Jam">
                     </div>
                     
                     <div class="form-group">
                         <label>Video URL</label>
-                        <input type="url" id="video" placeholder="https://youtube.com/... or https://bilibili.com/...">
+                        <input type="url" id="video" placeholder="https://youtube.com/watch?v=..." onchange="previewThumbnail()">
+                        <div class="help-text">Thumbnail will be auto-extracted from YouTube video</div>
+                    </div>
+                    
+                    <div class="form-group" id="thumbnail-preview" style="display: none;">
+                        <label>Thumbnail Preview</label>
+                        <img id="thumb-img" style="max-width: 320px; border-radius: 8px; border: 1px solid var(--border);" src="">
                     </div>
                     
                     <!-- Celeste-specific fields -->
                     <div id="celeste-fields" style="display: none;">
                         <div class="form-row">
-<div class="form-group" id="time-group">
-    <label>Time</label>
-    <input type="text" id="time" placeholder="e.g. 1:23:45" pattern="[0-9]+:[0-5][0-9]:[0-5][0-9]">
-    <div class="help-text">hh:mm:ss</div>
-</div>
+                            <div class="form-group" id="time-group">
+                                <label>Time <span style="color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
+                                <input type="text" id="time" placeholder="h:mm:ss" pattern="[0-9]+:[0-5][0-9]:[0-5][0-9]">
+                                <div class="help-text">Format: h:mm:ss or hh:mm:ss</div>
+                            </div>
                             <div class="form-group" id="deaths-group" style="display: none;">
-                                <label>Deaths</label>
+                                <label>Deaths <span style="color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
                                 <input type="number" id="deaths" min="0" placeholder="0">
                             </div>
                         </div>
@@ -322,7 +329,7 @@
                     <!-- GD-specific fields -->
                     <div id="gd-fields" style="display: none;">
                         <div class="form-group">
-                            <label>Attempts</label>
+                            <label>Attempts <span style="color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
                             <input type="number" id="attempts" min="1" placeholder="e.g. 1500">
                         </div>
                     </div>
@@ -351,6 +358,16 @@
         const API_URL = '/api/achievements';
         let currentUser = null;
         let allEntries = {};
+        
+        // GD Tier names from screenshots
+        const tierNames = {
+            1: 'Beginner', 2: 'Easy', 3: 'Medium', 4: 'Hard', 5: 'Very Hard',
+            6: 'Insane', 7: 'Extreme', 8: 'Remorseless', 9: 'Relentless',
+            10: 'Terrifying', 11: 'Catastrophic', 12: 'Merciless',
+            13: 'Excruciating', 14: 'Monstrous', 15: 'Apocalyptic',
+            16: 'Demonic', 17: 'Menacing', 18: 'Unreal', 19: 'Nightmare',
+            20: 'Extreme Demon', 21: 'Easy Demon', 22: 'Medium Demon'
+        };
         
         netlifyIdentity.on('init', user => {
             if (user) {
@@ -394,45 +411,67 @@
         
         function updateFormFields() {
             const category = document.getElementById('category').value;
-            const tierGroup = document.getElementById('tier-group');
-            const starGroup = document.getElementById('star-group');
             const difficultyRow = document.getElementById('difficulty-row');
+            const difficultySelect = document.getElementById('difficulty');
+            const difficultyLabel = document.getElementById('difficulty-label');
             const celesteFields = document.getElementById('celeste-fields');
             const gdFields = document.getElementById('gd-fields');
             const deathsGroup = document.getElementById('deaths-group');
-            const timeGroup = document.getElementById('time-group');
             
             // Reset
-            tierGroup.style.display = 'none';
-            starGroup.style.display = 'none';
             celesteFields.style.display = 'none';
             gdFields.style.display = 'none';
             deathsGroup.style.display = 'none';
-            document.getElementById('tier').required = false;
-            document.getElementById('star').required = false;
+            difficultyRow.style.display = 'none';
+            difficultySelect.innerHTML = '';
+            difficultySelect.required = false;
             
-            if (!category) {
-                difficultyRow.style.display = 'none';
-                return;
-            }
+            if (!category) return;
             
-            difficultyRow.style.display = 'grid';
+            difficultyRow.style.display = 'block';
+            difficultySelect.required = true;
             
             if (category === 'celeste_clears') {
-                starGroup.style.display = 'block';
-                document.getElementById('star').required = true;
+                difficultyLabel.textContent = 'Star Rating *';
+                // Stars 1-9
+                for (let i = 9; i >= 1; i--) {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.textContent = `${i} Star`;
+                    difficultySelect.appendChild(opt);
+                }
                 celesteFields.style.display = 'block';
                 deathsGroup.style.display = 'block';
-            } else if (category === 'celeste_goldens') {
-                tierGroup.style.display = 'block';
-                document.getElementById('tier').required = true;
-                celesteFields.style.display = 'block';
-                timeGroup.style.display = 'block';
             } else {
-                // GD categories
-                tierGroup.style.display = 'block';
-                document.getElementById('tier').required = true;
-                gdFields.style.display = 'block';
+                // GD Tiers or Goldens Tiers
+                difficultyLabel.textContent = 'Tier *';
+                const maxTier = category === 'celeste_goldens' ? 22 : 22;
+                for (let i = maxTier; i >= 1; i--) {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.textContent = tierNames[i] || `Tier ${i}`;
+                    difficultySelect.appendChild(opt);
+                }
+                
+                if (category === 'celeste_goldens') {
+                    celesteFields.style.display = 'block';
+                } else {
+                    gdFields.style.display = 'block';
+                }
+            }
+        }
+        
+        function previewThumbnail() {
+            const videoUrl = document.getElementById('video').value;
+            const previewDiv = document.getElementById('thumbnail-preview');
+            const img = document.getElementById('thumb-img');
+            
+            const match = videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+            if (match) {
+                img.src = `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg`;
+                previewDiv.style.display = 'block';
+            } else {
+                previewDiv.style.display = 'none';
             }
         }
         
@@ -445,25 +484,35 @@
                 return;
             }
             
+            const videoUrl = document.getElementById('video').value;
+            const difficulty = document.getElementById('difficulty').value;
+            
             const data = {
                 category,
                 name: document.getElementById('name').value,
                 campaign: document.getElementById('campaign').value || null,
-                thumbnail: document.getElementById('thumbnail').value || null,
-                video: document.getElementById('video').value || null
+                video: videoUrl || null
             };
             
+            // Auto-extract thumbnail from YouTube
+            if (videoUrl) {
+                const match = videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+                if (match) {
+                    data.thumbnail = `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg`;
+                }
+            }
+            
             if (category === 'celeste_clears') {
-                data.star = parseInt(document.getElementById('star').value);
+                data.star = parseInt(difficulty);
                 data.deaths = document.getElementById('deaths').value ? parseInt(document.getElementById('deaths').value) : null;
                 data.time = document.getElementById('time').value || null;
-            } else if (category === 'celeste_goldens') {
-                data.tier = parseInt(document.getElementById('tier').value);
-                data.time = document.getElementById('time').value || null;
             } else {
-                // GD
-                data.tier = parseInt(document.getElementById('tier').value);
-                data.attempts = document.getElementById('attempts').value ? parseInt(document.getElementById('attempts').value) : null;
+                data.tier = parseInt(difficulty);
+                if (category === 'celeste_goldens') {
+                    data.time = document.getElementById('time').value || null;
+                } else {
+                    data.attempts = document.getElementById('attempts').value ? parseInt(document.getElementById('attempts').value) : null;
+                }
             }
             
             try {
@@ -481,6 +530,7 @@
                 if (response.ok) {
                     showMessage('Achievement saved successfully', 'success');
                     document.getElementById('achievement-form').reset();
+                    document.getElementById('thumbnail-preview').style.display = 'none';
                     updateFormFields();
                     loadEntries();
                 } else {
@@ -515,10 +565,12 @@
                 const items = allEntries[cat] || [];
                 if (items.length === 0) return;
                 
-                html += `<h3 style="margin: 1.5rem 0 1rem; color: var(--text-secondary); font-weight: 400;">${getCategoryName(cat)}</h3>`;
+                html += `<h3 style="margin: 1.5rem 0 0.75rem; color: var(--text-secondary); font-size: 0.875rem; font-weight: 600; text-transform: uppercase;">${getCategoryName(cat)}</h3>`;
                 items.forEach((item, index) => {
-                    const meta = item.tier !== undefined ? `Tier ${item.tier}` : `${item.star} Star`;
-                    const extra = item.time ? ` • ${item.time}` : item.deaths !== null ? ` • ${item.deaths} deaths` : item.attempts ? ` • ${item.attempts} attempts` : '';
+                    const isStar = item.star !== undefined;
+                    const num = isStar ? item.star : item.tier;
+                    const meta = isStar ? `${num} Star` : (tierNames[num] || `Tier ${num}`);
+                    const extra = item.time ? ` • ${item.time}` : item.deaths !== null ? ` • ${item.deaths} deaths` : item.attempts ? ` • ${item.attempts.toLocaleString()} attempts` : '';
                     html += `
                         <div class="entry-item">
                             <div class="entry-info">
@@ -533,7 +585,7 @@
                 });
             });
             
-            container.innerHTML = html || '<p style="color: var(--text-secondary);">No entries found</p>';
+            container.innerHTML = html || '<p style="color: var(--text-secondary); font-size: 0.875rem;">No entries found</p>';
         }
         
         function getCategoryName(key) {
