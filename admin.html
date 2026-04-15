@@ -310,16 +310,11 @@
     </main>
 
     <script>
-        // ─── CONFIG ────────────────────────────────────────────────────────────
-        // CHANGE THIS to your desired admin password before deploying
-        const ADMIN_PASSWORD_HASH = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'; // "password" — CHANGE ME
-        // To generate a new hash: open browser console and run:
-        // crypto.subtle.digest('SHA-256', new TextEncoder().encode('yourpassword')).then(b => console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')))
+        const ADMIN_PASSWORD_HASH = 'c2ebb017e2ae8238800b3548d588ad58f5e839b1746f592f08579c078d0a3f5f';
 
         const REPO_OWNER = 'TFuqua07';
         const REPO_NAME  = 'nebula.github.io';
         const FILE_PATH  = 'data/achievements.json';
-        // ───────────────────────────────────────────────────────────────────────
 
         const tierNames = {
             1:'Beginner',2:'Easy',3:'Medium',4:'Hard',5:'Very Hard',
@@ -333,7 +328,6 @@
         let allEntries = {};
         let currentSha = null;
 
-        // ─── AUTH ──────────────────────────────────────────────────────────────
         async function hashPassword(pw) {
             const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
             return [...new Uint8Array(buf)].map(x => x.toString(16).padStart(2,'0')).join('');
